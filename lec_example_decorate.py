@@ -5,11 +5,11 @@ def logger(func):
         result = func(list_of_num)
         f = open("/workspaces/oop_and_aps/цифирки", "w")
         f.write(str(result))
+        f.close()# функция, закрывающая файл
         return result
     return wrapper_function
 
-    @logger
-    def summator(list_of_num):
-        return sum(list_of_num)
-    summator([1,2,3,4])
-    f.close() # функция, закрывающая файл
+@logger
+def summator(list_of_num):
+    return sum(list_of_num)
+summator([1,2,3,4])

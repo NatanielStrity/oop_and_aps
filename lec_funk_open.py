@@ -1,5 +1,8 @@
 #f = open("путь к файлу", режим открытия)
-f = open(file, mode='r')
+def print():
+    f = open('/workspaces/oop_and_aps/цифирки', mode='r')
+    f.read()
+    f.close()
 '''  Чтение файла - “r”
 
 Перезапись содержимого - “w”
