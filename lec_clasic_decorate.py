@@ -10,8 +10,5 @@ class MyClass:
 
 
 MyClass.classmethod()
-mc1 = MyClass()
-mc2 = MyClass()
-mc3 = MyClass()
-
+mc = MyClass()
 MyClass.classmethod()

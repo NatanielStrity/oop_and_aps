@@ -8,7 +8,7 @@ def decorator(number):
     
 
 @decorator(4)
-def get_number():
-    return 10
+def get_number(*arg):
+    return sum(arg)
 
-result = get_number()
+result = get_number(5, 8, 6)

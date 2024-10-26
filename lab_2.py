@@ -1,22 +1,20 @@
-def two_variables(num1, num2, oper):
-    def decorator(func):
-        def wrapper():
-            if oper == '+':
+def decorator(func):
+    def a(num1, num2, oper):
+        if oper == '+':
+            return func(num1, num2, oper)
+        elif oper == '-':
+            return func(num1, num2, oper)
+        elif oper == '*':
+            return func(num1, num2, oper)
+        elif oper == '/':
+            if num2 != 0 :
                 return func(num1, num2, oper)
-            elif oper == '-':
-                return func(num1, num2, oper)
-            elif oper == '*':
-                return func(num1, num2, oper)
-            elif oper == '/':
-                if num2 != 0 :
-                    return func(num1, num2, oper)
-                else:
-                    print('НЕТ!!! ТАК НЕЛЬЗЯ!!!')
-        return wrapper
-    return decorator
+            else:
+                print('НЕТ!!! ТАК НЕЛЬЗЯ!!!')
+    return a
 
-@two_variables(6, 5, '+')
-def culc(num1, num2, oper):
+@decorator
+def two_variables(num1, num2, oper):
     if oper == '+':
         return num1 + num2
     elif oper == '-':
@@ -26,7 +24,7 @@ def culc(num1, num2, oper):
     elif oper == '/':
         return num1 / num2
     
-print(culc())
+print(two_variables(6, 5, '+'))
     
     
             
