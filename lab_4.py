@@ -48,3 +48,5 @@ day = int(input())
 for i in range(day):
     Planeta.prirost_naseleniя
     Planeta.prirost_naseleniя()
+
+print(f'Население: {planeta.gungan_count}')
