@@ -10,3 +10,5 @@ decorate_example()
 # Другое объявление декоратора
 decorate_example = decorator(decorate_example)
 decorate_example()
+
+print(10, 15, 20, sep = '\n')
