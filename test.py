@@ -173,9 +173,3 @@ k = Peasant('Крестьянин')
 l = Archer('Лучник')
 t = Footman('Мечник')
 m = Priest('Монах')
-
-
-l.spawn(15)
-k.spawn(10)
-k.attack(l)
-l.attack(k)
