@@ -174,3 +174,5 @@ k = Peasant('Крестьянин')
 l = Archer('Лучник')
 t = Footman('Мечник')
 m = Priest('Монах')
+
+
