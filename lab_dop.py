@@ -45,6 +45,7 @@ class Creature():
         damage_dealt = max(0, self.total_damage() - other.defense)
         print(f"{self.name} атакует {other.name} на {damage_dealt} урона!")
         other.take_damage(damage_dealt)
+        other.retaliatory_attack
 
     def retaliatory_attack(self, other):
         self.damage_dealt = max(0, self.total_damage()*0.75 - other.defense)
@@ -83,16 +84,21 @@ class Archer(Creature):
         super().__init__("Лучники", health=7, defense=3, damage=r.randint(2, 4))
 
     def archery(self, other):
-        super().attack(other = other)
+        super().attack(other)
         other.retaliatory_attack(Archer)
     
     def retaliatory_attack(self, other):
-        super().retaliatory_attack(other = other)
+        super().retaliatory_attack(other)
 
 
 class Footman(Creature):
     def __init__(self):
         super().__init__("Мечники", health=16, defense=8, damage=r.randint(2, 4))
+
+    
+    def sword_attack(self, other):
+        super().attack(other = other)
+        other.retaliatory_attack(Footman)
 
 
 class Priest(Creature):
@@ -110,12 +116,16 @@ if __name__ == "__main__":
 
 
     
-    hero.magic_cast("Каменная Кожа")
-    #peasants.spawn(10)
-    #archers.spawn(5)
+    #hero.magic_cast("Каменная Кожа")
+    peasants.spawn(10)
+    archers.spawn(5)
 
-    #peasants.attack(archers)
-    #peasants.attack(archers)
+    peasants.status()
+
+    peasants.attack(archers)
+
+    peasants.status()
+
 
     
     #archers.status()
