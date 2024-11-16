@@ -1,6 +1,30 @@
 import random as r
 
-class Creature:
+
+class Hero:
+    def __init__(self, name, mana):
+        self.name = name
+        self.mana = mana
+
+    def magic_cast(self, spell):
+        if spell == "Каменная Кожа" and self.mana >= 10:
+            self.mana -= 10
+            buf_d = 12
+            return buf_d  # Увеличение защиты
+        elif spell == "Божественная сила" and self.mana >= 15:
+            self.mana -= 15
+            buf_a = 5
+            return buf_a  # Увеличение атаки
+        else:
+            print("Недостаточно маны или неправильное заклинание.")
+            return 0
+    
+    def info(self):
+        return print(f"Текущий уровень маны Героя {self.name}: {self.mana}")
+        
+
+
+class Creature(Hero):
     def __init__(self, name, health, defense, damage):
         self.name = name
         self.health = health
@@ -39,11 +63,14 @@ class Creature:
 
     def status(self):
         return print(f"{self.name}: {self.count} (Здоровье: {self.total_health()})")
+    
+    # def buf(self, defence):
 
 
 class Peasant(Creature):
     def __init__(self):
         super().__init__("Крестьяне", health=3, defense=1, damage=1)
+
     
     def pitchfork_attack(self, other):
         super().attack(other = other)
@@ -77,15 +104,20 @@ class Priest(Creature):
 
 if __name__ == "__main__":
 
+    hero = Hero('Писюньчик', 100)
     peasants = Peasant()
     archers = Archer()
     footman = Footman()
     priest = Priest()
 
 
-    peasants.spawn(10)
-    archers.spawn(5)
-
-    peasants.attack(archers)
     
-    archers.status()
+    hero.magic_cast("Каменная Кожа")
+    #peasants.spawn(10)
+    #archers.spawn(5)
+
+    #peasants.attack(archers)
+    #peasants.attack(archers)
+
+    
+    #archers.status()
