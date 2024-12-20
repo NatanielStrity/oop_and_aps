@@ -7,6 +7,8 @@ class Hero:
         self.mana = mana
 
     def magic_cast(self, spell):
+        buf_a = 0
+        buf_d = 0
         if spell == "Каменная Кожа" and self.mana >= 10:
             self.mana -= 10
             buf_d = 12
@@ -24,7 +26,7 @@ class Hero:
         
 
 
-class Creature():
+class Creature(Hero):
     def __init__(self, name, health, defense, damage):
         self.name = name
         self.health = health
@@ -45,7 +47,6 @@ class Creature():
         damage_dealt = max(0, self.total_damage() - other.defense)
         print(f"{self.name} атакует {other.name} на {damage_dealt} урона!")
         other.take_damage(damage_dealt)
-        other.retaliatory_attack
 
     def retaliatory_attack(self, other):
         self.damage_dealt = max(0, self.total_damage()*0.75 - other.defense)
@@ -66,20 +67,20 @@ class Creature():
         return print(f"{self.name}: {self.count} (Здоровье: {self.total_health()})")
 
 
-class Peasant(Creature):
+class Peasant(Creature, Hero):
     def __init__(self):
         super().__init__("Крестьяне", health=3, defense=1, damage=1)
 
     
     def pitchfork_attack(self, other):
-        super().attack(other = other)
+        super().attack(other)
         other.retaliatory_attack(Peasant)
     
     def retaliatory_attack(self, other):
         super().retaliatory_attack(other = other)
 
 
-class Archer(Creature):
+class Archer(Creature, Hero):
     def __init__(self):
         super().__init__("Лучники", health=7, defense=3, damage=r.randint(2, 4))
 
@@ -91,7 +92,7 @@ class Archer(Creature):
         super().retaliatory_attack(other)
 
 
-class Footman(Creature):
+class Footman(Creature, Hero):
     def __init__(self):
         super().__init__("Мечники", health=16, defense=8, damage=r.randint(2, 4))
 
@@ -101,7 +102,7 @@ class Footman(Creature):
         other.retaliatory_attack(Footman)
 
 
-class Priest(Creature):
+class Priest(Creature, Hero):
     def __init__(self):
         super().__init__("Монахи", health=54, defense=12, damage=r.randint(9, 12))
 

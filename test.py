@@ -1,123 +1,94 @@
-import random as r
+class Unit:
+    def __init__(self, name, health, defense, attack):
+        self.name = name
+        self.max_health = health
+        self.health = health
+        self.defense = defense
+        self.attack = attack
+        self.count = 0  # Количество юнитов
+
+    def spawn(self, count):
+        self.count += count
+        self.health = self.max_health  # Сбрасываем здоровье после спавна
+
+    def total_health(self):
+        return self.health * self.count
+
+    def total_attack(self):
+        return self.attack * self.count
+
+    def is_alive(self):
+        return self.health > 0
+
+    def attack_unit(self, other):
+        damage = self.total_attack() - other.defense
+        if damage > 0:
+            other.health -= damage
+            if other.health < 0:
+                other.health = 0
+        print(f"{self.name} атакует {other.name}. Нанесено урона: {damage}. Оставшееся здоровье {other.name}: {other.health}")
 
 
 class Hero:
     def __init__(self, name, mana):
         self.name = name
         self.mana = mana
+        self.units = {}
 
-    def magic_cast(self, spell):
-        if spell == "Каменная Кожа" and self.mana >= 10:
-            self.mana -= 10
-            buf_d = 12
-            return buf_d  # Увеличение защиты
-        elif spell == "Божественная сила" and self.mana >= 15:
-            self.mana -= 15
-            buf_a = 5
-            return buf_a  # Увеличение атаки
-        else:
-            print("Недостаточно маны или неправильное заклинание.")
-            return 0
-    
-    def info(self):
-        return print(f"Текущий уровень маны Героя {self.name}: {self.mana}")
+    def spawn(self, unit_class, count):
+        unit = unit_class()  # Создаем экземпляр юнита
+        unit.spawn(count)
+        self.units[unit.name.lower()] = unit
+        print(f"{self.name} создал {count} {unit.name}(ов).")
+
+    def cast_stone_skin(self, unit_name):
+        if unit_name.lower() not in self.units:
+            print(f"{self.name} не имеет юнита {unit_name} в своей команде.")
+            return
         
+        unit = self.units[unit_name.lower()]  # Находим юнит по имени
+        if self.mana >= 10:
+            unit.defense += 12
+            self.mana -= 10
+            print(f"{self.name} использует каменную кожу на {unit.name}. Защита увеличена на 12.")
+        else:
+            print(f"{self.name} недостаточно маны для использования каменной кожи.")
+
+    def attack(self, attacker_name, hero_target, target_name):
+        if attacker_name.lower() not in self.units:
+            print(f"{self.name} не имеет юнита {attacker_name} для атаки.")
+            return
+        
+        attacker = self.units[attacker_name.lower()]  # Находим атакующего юнита
+        if target_name.lower() not in hero_target.units:
+            print(f"{hero_target.name} не имеет юнита {target_name} на которого можно атаковать.")
+            return
+        
+        target = hero_target.units[target_name.lower()]  # Находим защищающегося юнита
+        attacker.attack_unit(target)
 
 
-class Creature(Hero):
-    def __init__(self, name, health, defense, damage):
-        self.name = name
-        self.health = health
-        self.defense = defense
-        self.damage = damage
-        self.count = 0
+# Пример использования:
 
-    def spawn(self, n):
-        self.count += n
-
-    def total_health(self):
-        return self.health * self.count
-
-    def total_damage(self):
-        return self.damage * self.count
-
-    def attack(self, other):
-        damage_dealt = max(0, self.total_damage() - other.defense)
-        print(f"{self.name} атакует {other.name} на {damage_dealt} урона!")
-        other.take_damage(damage_dealt)
-
-    def retaliatory_attack(self, other):
-        self.damage_dealt = max(0, self.total_damage()*0.75 - other.defense)
-        print(f"{self.name} дает отпор {other.name} на {self.damage_dealt} урона!")
-        other.take_damage(self.damage_dealt)
-
-    def take_damage(self, damage):
-        if damage > 0:
-            self.count -= damage // self.health
-            print(f"{self.name} теряет {damage} здоровья. Осталось существ в отряде {self.count}. Общее здоровье отряда: {self.total_health()}.")
-        if self.count < 0:
-            self.count = 0
-
-    def is_alive(self):
-        return self.count > 0
-
-    def status(self):
-        return print(f"{self.name}: {self.count} (Здоровье: {self.total_health()})")
-    
-    # def buf(self, defence):
-
-
-class Peasant(Creature):
+class Peasant(Unit):
     def __init__(self):
-        super().__init__("Крестьяне", health=3, defense=1, damage=1)
+        super().__init__("Peasant", 30, 2, 5)
 
-    
-    def pitchfork_attack(self, other):
-        super().attack(other = other)
-        other.retaliatory_attack(Peasant)
-    
-    def retaliatory_attack(self, other):
-        super().retaliatory_attack(other = other)
-
-
-class Archer(Creature):
+class Archer(Unit):
     def __init__(self):
-        super().__init__("Лучники", health=7, defense=3, damage=r.randint(2, 4))
-
-    def archery(self, other):
-        super().attack(other = other)
-        other.retaliatory_attack(Archer)
-    
-    def retaliatory_attack(self, other):
-        super().retaliatory_attack(other = other)
-
-
-class Footman(Creature):
-    def __init__(self):
-        super().__init__("Мечники", health=16, defense=8, damage=r.randint(2, 4))
-
-
-class Priest(Creature):
-    def __init__(self):
-        super().__init__("Монахи", health=54, defense=12, damage=r.randint(9, 12))
+        super().__init__("Archer", 25, 1, 7)
 
 
 if __name__ == "__main__":
-
-    hero = Hero('Писюньчик', 100)
-    peasants = Peasant()
-    archers = Archer()
-    footman = Footman()
-    priest = Priest()
-
-
+    hero1 = Hero("Hero1", 100)
+    hero2 = Hero("Hero2", 50)
     
-    hero.magic_cast("Каменная Кожа")
-    #peasants.spawn(10)
-    #archers.spawn(5)
-
-    #peasants.attack(archers)
-    #peasants.attack(archers)
-
+    # Спавним юнитов
+    hero1.spawn(Peasant, 5)
+    hero2.spawn(Archer, 3)
     
-    #archers.status()
+    # Применяем заклинание
+    hero1.cast_stone_skin("Peasant")
+    
+    # Атакуем
+    hero1.attack("Peasant", hero2, "Archer")
